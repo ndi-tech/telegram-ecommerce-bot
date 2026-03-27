@@ -1,19 +1,33 @@
-# bot.py - WITH MANUAL BITCOIN PAYMENT SYSTEM
+﻿# bot.py - WITH MANUAL BITCOIN PAYMENT SYSTEM
 import telebot
 import sqlite3
 import logging
 import payment  # Manual Bitcoin payment module
+import os
+from dotenv import load_dotenv
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # ========== CONFIGURATION ==========
-BOT_TOKEN = "8067569796:AAEB3aW-bu9qVf0Y16kyS0WtxfiZO6A-ago"
+# Load .env file for local testing (optional)
+load_dotenv()
 
-# Admin user ID - replace with your Telegram user ID
-# To get your ID, message @userinfobot on Telegram
-ADMIN_USER_ID = None  # Set this to your user ID for admin features
+# Get token from environment variable (Railway/Koyeb provides this)
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+if not BOT_TOKEN:
+    print("❌ ERROR: BOT_TOKEN environment variable not set!")
+    print("Please set BOT_TOKEN in Railway/Koyeb Variables tab")
+    exit(1)
+
+# Get admin ID from environment variable
+ADMIN_USER_ID = os.getenv('ADMIN_USER_ID')
+if ADMIN_USER_ID:
+    ADMIN_USER_ID = int(ADMIN_USER_ID)
+    print(f"✅ ADMIN_USER_ID loaded: {ADMIN_USER_ID}")
+else:
+    print("⚠️  ADMIN_USER_ID not set - admin commands won't work")
 
 # User states for handling text input
 user_states = {}
